@@ -1,10 +1,10 @@
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 
-import Dashboard  from ".pages/Dashboard";
-import RoomService  from ".pages/RoomService";
-import Housekeeping  from ".pages/Housekeeping";
-import Amenities  from ".pages/Amenities";
-import RequestHistory  from ".pages/RequestHistory";
+import Dashboard  from "./pages/Dashboard";
+import RoomService  from "./pages/RoomService";
+import Housekeeping  from "./pages/Housekeeping";
+import Amenities  from "./pages/Amenities";
+import RequestHistory  from "./pages/RequestHistory";
 
 function App() {
   return (
