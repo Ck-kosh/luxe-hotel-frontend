@@ -1,5 +1,8 @@
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 
+
+import './index.css';
+import './App.css'
 import Navbar from "./components/Navbar"
 
 import Dashboard  from "./pages/Dashboard";
