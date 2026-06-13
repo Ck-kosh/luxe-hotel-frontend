@@ -14,6 +14,7 @@ import RoomService from "./pages/RoomService";
 import Housekeeping from "./pages/Housekeeping";
 import Amenities from "./pages/Amenities";
 import RequestHistory from "./pages/RequestHistory";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/amenities" element={<Amenities />} />
         <Route path="/requests" element={<RequestHistory />} />
         <Route path="/request" element={<RequestHistory />} />
+        <Route path="/contact-us"element={<ContactUs />}/>
         <Route path="*" element={<Home />} />
       </Routes>
       </BrowserRouter>
