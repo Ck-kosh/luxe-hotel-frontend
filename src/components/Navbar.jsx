@@ -17,7 +17,6 @@ export default function Navbar() {
             <Link to="/book" className="hover:text-gray-200">Book Room</Link>
           </li>
           
-          {/* Admin dropdown - fixed JSX */}
           <li className="relative group">
             <Link 
               to="/admin" 
@@ -29,7 +28,7 @@ export default function Navbar() {
               </svg>
             </Link>
             
-            {/* Dropdown menu */}
+
             <ul className="absolute left-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
               <li>
                 <Link to="/admin" className="block px-4 py-2 hover:bg-gray-100 rounded-t-lg">Dashboard</Link>
