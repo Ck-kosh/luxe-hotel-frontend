@@ -19,7 +19,7 @@ export default function RequestTracker() {
 
       <div className="space-y-3">
         {requests.map(req => (
-          <div key={req.id} className="bg-white p-4 rounded-lg shadow flex justify-between items-center">
+          <div key={req.id} className="bg-white p-4 rounded-lg shadow border flex justify-between items-center">
             <div>
               <p className="font-semibold">{req.type} - Room {req.room}</p>
               <p className="text-sm text-gray-500">{req.time}</p>
