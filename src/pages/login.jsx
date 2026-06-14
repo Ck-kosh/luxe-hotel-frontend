@@ -9,7 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// 🔑 REPLACE WITH YOUR CONFIG
+//  REPLACE WITH YOUR CONFIG
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -68,7 +68,7 @@ mainBtn.addEventListener('click', async () => {
             // SIGN UP
             userCredential = await createUserWithEmailAndPassword(auth, email, password);
             
-            // ✅ SAVE TO REALTIME DATABASE
+            //  SAVE TO REALTIME DATABASE
             const user = userCredential.user;
             await set(ref(db, 'users/' + user.uid), {
                 username: email.split('@')[0],
@@ -90,7 +90,7 @@ googleBtn.addEventListener('click', async () => {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
 
-        // ✅ SAVE/UPDATE USER IN REALTIME DB ON GOOGLE LOGIN
+        //  SAVE/UPDATE USER IN REALTIME DB ON GOOGLE LOGIN
         await set(ref(db, 'users/' + user.uid), {
             username: user.displayName,
             email: user.email,
@@ -121,3 +121,4 @@ onAuthStateChanged(auth, (user) => {
         // window.location.href = "/dashboard.html";
     }
 });
+
