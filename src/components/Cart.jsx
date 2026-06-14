@@ -108,7 +108,7 @@ function Cart({
               name="fullName"
               value={userDetails.fullName}
               onChange={handleInputChange}
-              placeholder="John Doe"
+              placeholder="Elias Kosh"
               className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-black outline-none"
             />
           </div>
@@ -124,7 +124,7 @@ function Cart({
               name="email"
               value={userDetails.email}
               onChange={handleInputChange}
-              placeholder="john@example.com"
+              placeholder="elias@gmail.com"
               className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-black outline-none"
             />
           </div>
@@ -132,7 +132,7 @@ function Cart({
           {/* PHONE NUMBER */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Phone Number (e.g., 2547XXXXXXXX)
+              Phone Number (e.g., 254769021360)
             </label>
             <input
               required
@@ -140,7 +140,7 @@ function Cart({
               name="phoneNumber"
               value={userDetails.phoneNumber}
               onChange={handleInputChange}
-              placeholder="2547XXXXXXXX"
+              placeholder="254769021360"
               className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-black outline-none"
             />
           </div>
