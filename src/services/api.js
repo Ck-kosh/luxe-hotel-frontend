@@ -1,35 +1,28 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const BASE_URL = "http://192.168.1.108:8000";
 
-async function request(path, options = {}) {
-  const response = await fetch(`${API_URL}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-    ...options,
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
-  }
-
-  return response.json();
-}
-
-const API = {
-  get(path) {
-    return request(path, { method: "GET" });
-  },
-  post(path, body) {
-    return request(path, { method: "POST", body: JSON.stringify(body) });
-  },
-  patch(path, body) {
-    return request(path, { method: "PATCH", body: JSON.stringify(body) });
-  },
-  delete(path) {
-    return request(path, { method: "DELETE" });
-  },
+export const getBookings = async () => {
+  const res = await fetch(`${BASE_URL}/bookings`);
+  return res.json();
 };
 
-export default API;
+export const addBooking = async (booking) => {
+  const res = await fetch(`${BASE_URL}/bookings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(booking)
+  });
+  return res.json();
+};
+
+export const updateBooking = async (id, data) => {
+  const res = await fetch(`${BASE_URL}/bookings/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  return res.json();
+};
+
+export const deleteBooking = async (id) => {
+  await fetch(`${BASE_URL}/bookings/${id}`, { method: "DELETE" });
+};
