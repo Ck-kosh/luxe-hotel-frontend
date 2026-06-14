@@ -20,6 +20,7 @@ import BookingCalendar from "./pages/BookingCalendar";
 import AdminDashboard from "./pages/AdminDashboard";
 import ReportsPage from "./pages/ReportsPage";
 import RequestTracker from "./pages/RequestTracker";
+import Auth from "./pages/Auth";
 
 
 function App() {
@@ -42,7 +43,8 @@ function App() {
         <Route path="/admin" element={<AdminDashboard />} />          
         <Route path="/admin/bookings" element={<BookingCalendar />} /> 
         <Route path="/admin/reports" element={<ReportsPage />} />      
-        <Route path="/admin/requests" element={<RequestTracker />} />  
+        <Route path="/admin/requests" element={<RequestTracker />} /> 
+        <Route path="/login" element={<Auth />} /> 
       </Routes>
       </BrowserRouter>
   );
