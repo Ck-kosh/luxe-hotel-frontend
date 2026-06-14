@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getBookings, addBooking } from "./services/api.js"
+import { getBookings, addBooking } from "../services/api.js"
 
 export default function BookingCalendar() {
   const [bookings, setBookings] = useState([])

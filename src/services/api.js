@@ -26,3 +26,5 @@ export const updateBooking = async (id, data) => {
 export const deleteBooking = async (id) => {
   await fetch(`${BASE_URL}/bookings/${id}`, { method: "DELETE" });
 };
+
+export default { getBookings, addBooking }
