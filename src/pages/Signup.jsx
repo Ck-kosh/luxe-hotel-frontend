@@ -104,7 +104,7 @@ function Signup() {
                   id="signup-name"
                   type="text"
                   name="name"
-                  placeholder="John Doe"
+                  placeholder="George Njenga"
                   value={form.name}
                   onChange={handleChange}
                   required
@@ -118,7 +118,7 @@ function Signup() {
                   id="signup-email"
                   type="email"
                   name="email"
-                  placeholder="you@example.com"
+                  placeholder="njenga@gmail.com"
                   value={form.email}
                   onChange={handleChange}
                   required
