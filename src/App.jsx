@@ -15,6 +15,10 @@ import Housekeeping from "./pages/Housekeeping";
 import Amenities from "./pages/Amenities";
 import RequestHistory from "./pages/RequestHistory";
 import ContactUs from "./pages/ContactUs";
+import BookingCalendar from "./pages/BookingCalendar";
+import AdminDashboard from "./pages/AdminDashboard";
+import ReportsPage from "./pages/ReportsPage";
+import RequestTracker from "./pages/RequestTracker";
 
 function App() {
   return (
@@ -33,6 +37,10 @@ function App() {
         <Route path="/request" element={<RequestHistory />} />
         <Route path="/contact-us"element={<ContactUs />}/>
         <Route path="*" element={<Home />} />
+        <Route path="/admin" element={<AdminDashboard />} />          
+        <Route path="/admin/bookings" element={<BookingCalendar />} /> 
+        <Route path="/admin/reports" element={<ReportsPage />} />      
+        <Route path="/admin/requests" element={<RequestTracker />} />  
       </Routes>
       </BrowserRouter>
   );

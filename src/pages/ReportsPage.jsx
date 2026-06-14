@@ -1,25 +1,32 @@
-import React from 'react'
+import { useEffect, useState } from "react"
+import { getBookings } from "../services/api.js"
 
-export default function ReportsPage() {
+export default function Reports() {
+  const [bookings, setBookings] = useState([])
+
+  useEffect(() => {
+    getBookings().then(setBookings)
+  }, [])
+
+  const total = bookings.length
+  const thisMonth = bookings.filter(b => b.check_in.startsWith('2026-05')).length
+
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Reports</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow border">
-          <h2 className="text-xl font-semibold mb-2">Booking Report</h2>
-          <p className="text-gray-600 mb-4">Export booking data for selected dates</p>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Download CSV
-          </button>
+      
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white rounded-lg shadow border p-6">
+          <p className="text-gray-500 text-sm">Total Bookings</p>
+          <p className="text-3xl font-bold">{total}</p>
         </div>
-
-        <div className="bg-white p-6 rounded-lg shadow border">
-          <h2 className="text-xl font-semibold mb-2">Occupancy Report</h2>
-          <p className="text-gray-600 mb-4">View room occupancy trends</p>
-          <button className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
-            View Details
-          </button>
+        <div className="bg-white rounded-lg shadow border p-6">
+          <p className="text-gray-500 text-sm">This Month</p>
+          <p className="text-3xl font-bold">{thisMonth}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow border p-6">
+          <p className="text-gray-500 text-sm">Revenue</p>
+          <p className="text-3xl font-bold">KES {(total * 5000).toLocaleString()}</p>
         </div>
       </div>
     </div>
