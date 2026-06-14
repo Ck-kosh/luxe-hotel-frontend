@@ -1,22 +1,23 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { ref, set } from "firebase/database";
 import { auth, db, provider } from "../services/firebase";
 import { useNavigate } from "react-router-dom";
 
 
+
+
 function simplifyError(code) {
-  if (code?.includes("wrong-password")) return "Wrong password.";
-  if (code?.includes("user-not-found")) return "No account found with this email.";
+  if (code?.includes("email-already-in-use")) return "Email is already registered.";
+  if (code?.includes("weak-password")) return "Password must be at least 6 characters.";
   if (code?.includes("invalid-email")) return "Invalid email address.";
-  if (code?.includes("invalid-credential")) return "Invalid email or password.";
   if (code?.includes("popup-closed")) return "Google sign-in was cancelled.";
   return "Something went wrong. Please try again.";
 }
 
-function Login() {
+function Signup() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,13 +29,24 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (!form.email || !form.password) {
+
+    if (!form.name || !form.email || !form.password || !form.confirm) {
       setError("Please fill in all fields.");
       return;
     }
+    if (form.password !== form.confirm) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, form.email, form.password);
+      const cred = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      await set(ref(db, "users/" + cred.user.uid), {
+        username: form.name,
+        email: form.email,
+        createdAt: Date.now(),
+      });
       navigate("/");
     } catch (err) {
       setError(simplifyError(err.code));
@@ -67,12 +79,13 @@ function Login() {
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-slate-100 flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
 
+        {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
 
-          {/* Header */}
+          {/* Header strip */}
           <div className="bg-teal-700 px-8 py-8 text-center">
-            <h1 className="text-3xl font-bold text-white tracking-wide">Welcome Back</h1>
-            <p className="text-teal-200 mt-1 text-sm">Sign in to your Luxe Hotel account</p>
+            <h1 className="text-3xl font-bold text-white tracking-wide">Create Account</h1>
+            <p className="text-teal-200 mt-1 text-sm">Join Luxe Hotel and start your journey</p>
           </div>
 
           {/* Form */}
@@ -86,9 +99,23 @@ function Login() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <input
+                  id="signup-name"
+                  type="text"
+                  name="name"
+                  placeholder="John Doe"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
+                />
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                 <input
-                  id="login-email"
+                  id="signup-email"
                   type="email"
                   name="email"
                   placeholder="you@example.com"
@@ -102,10 +129,10 @@ function Login() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                 <input
-                  id="login-password"
+                  id="signup-password"
                   type="password"
                   name="password"
-                  placeholder="Your password"
+                  placeholder="Min. 6 characters"
                   value={form.password}
                   onChange={handleChange}
                   required
@@ -113,24 +140,40 @@ function Login() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                <input
+                  id="signup-confirm"
+                  type="password"
+                  name="confirm"
+                  placeholder="Re-enter password"
+                  value={form.confirm}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
+                />
+              </div>
+
               <button
-                id="login-btn"
+                id="signup-btn"
                 type="submit"
                 disabled={loading}
                 className="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold py-3 rounded-lg transition disabled:opacity-60"
               >
-                {loading ? "Signing in..." : "Log In"}
+                {loading ? "Creating account..." : "Sign Up"}
               </button>
             </form>
 
+            {/* Divider */}
             <div className="flex items-center gap-3">
               <div className="flex-1 h-px bg-gray-200" />
               <span className="text-xs text-gray-400">OR</span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
+            {/* Google */}
             <button
-              id="login-google-btn"
+              id="signup-google-btn"
               onClick={handleGoogle}
               disabled={loading}
               className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition disabled:opacity-60"
@@ -144,10 +187,11 @@ function Login() {
               Continue with Google
             </button>
 
+            {/* Switch to login */}
             <p className="text-center text-sm text-gray-500">
-              Don't have an account?{" "}
-              <a href="/signup" className="text-teal-700 font-semibold hover:underline">
-                Sign Up
+              Already have an account?{" "}
+              <a href="/login" className="text-teal-700 font-semibold hover:underline">
+                Log In
               </a>
             </p>
 
@@ -158,4 +202,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
