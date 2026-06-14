@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import './index.css';
 import './App.css';
-import Navbar from "./components/Navbar";
 
+
+import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Booking from "./pages/Booking";
@@ -19,6 +20,7 @@ import BookingCalendar from "./pages/BookingCalendar";
 import AdminDashboard from "./pages/AdminDashboard";
 import ReportsPage from "./pages/ReportsPage";
 import RequestTracker from "./pages/RequestTracker";
+
 
 function App() {
   return (
