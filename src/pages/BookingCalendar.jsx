@@ -27,8 +27,8 @@ export default function BookingCalendar() {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Guest</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Room</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Check In</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Check Out</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>

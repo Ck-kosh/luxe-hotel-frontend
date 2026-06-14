@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:8000";
 
 export const getBookings = async () => {
-  const res = await fetch(`${BASE_URL}/bookings`);
+  const res = await fetch(`${BASE_URL}/admin/bookings`);
   return res.json();
 };
 
@@ -27,4 +27,19 @@ export const deleteBooking = async (id) => {
   await fetch(`${BASE_URL}/bookings/${id}`, { method: "DELETE" });
 };
 
-export default { getBookings, addBooking }
+export const getAdminStats = async () => {
+  const res = await fetch(`${BASE_URL}/admin/stats`);
+  return res.json();
+};
+
+export const getRequests = async () => {
+  const res = await fetch(`${BASE_URL}/requests`);
+  return res.json();
+};
+
+export const getReports = async () => {
+  const res = await fetch(`${BASE_URL}/reports`);
+  return res.json();
+};
+
+export default { getBookings, addBooking, updateBooking, deleteBooking, getAdminStats, getRequests, getReports }
