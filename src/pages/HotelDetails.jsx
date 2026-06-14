@@ -50,7 +50,7 @@ const HotelDetails = () => {
         
         <h2 className="text-2xl font-bold mb-4">Location</h2>
         <p className="text-gray-700 mb-4">
-          Located at 7 Kapsio, Iten, Kenya. 
+          Located at  Nairobi, Kenya. 
         </p>
       
         <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
