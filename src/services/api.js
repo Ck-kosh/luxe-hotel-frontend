@@ -1,4 +1,4 @@
-const BASE_URL = "http://192.168.1.108:8000";
+const BASE_URL = "http://localhost:8000";
 
 export const getBookings = async () => {
   const res = await fetch(`${BASE_URL}/bookings`);
