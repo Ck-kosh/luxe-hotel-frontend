@@ -16,9 +16,9 @@ export default function Navbar() {
            <li>
             <Link to="/hotel-details" className="hover:text-gray-200">Hotel Details</Link>
           </li>
-          {/* <li>
-            <Link to="/book" className="hover:text-gray-200">Book Room</Link>
-          </li> */}
+          <li>
+            <Link to="/login" className="hover:text-gray-200">login</Link>
+          </li>
           <li>
             <Link to="/contact-us" className="hover:text-gray-200">Contact Us</Link>
           </li>
