@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
 import ProductCard from "../components/ProductCard";
 import Cart from "../components/Cart";
@@ -81,6 +82,7 @@ function Booking() {
   const [cart, setCart] = useState([]);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
 
   // FETCH PRODUCTS
   const fetchProducts = useCallback(async () => {
@@ -224,7 +226,7 @@ function Booking() {
     }
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = (checkoutData) => {
 
     if (cart.length === 0) {
       alert("No rooms selected");
@@ -239,7 +241,16 @@ function Booking() {
     localStorage.setItem("bookingCart", JSON.stringify(cart));
     localStorage.setItem("bookingTotal", JSON.stringify(total));
 
-    navigate("/login");
+    if (checkoutData) {
+      localStorage.setItem("bookingDetails", JSON.stringify(checkoutData));
+    }
+
+    if (!user) {
+      navigate("/login", { state: { from: "/booking" } });
+      return;
+    }
+
+    navigate("/dashboard");
   };
 
   const filteredProducts = products.filter(
@@ -306,6 +317,8 @@ function Booking() {
           <Cart
             cart={cart}
             handleBuy={handleCheckout}
+            user={user}
+            authLoading={authLoading}
           />
 
         </div>
