@@ -250,7 +250,7 @@ function Booking() {
     localStorage.setItem("bookingCart", JSON.stringify(cart));
     localStorage.setItem("bookingTotal", JSON.stringify(total));
 
-    navigate("/billing");
+    navigate("/login");
   };
 
   // SEARCH
