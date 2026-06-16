@@ -5,7 +5,7 @@ export default function RequestTracker() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('http://localhost:8000/admin/services') // 👈 changed from /admin/requests
+    fetch('http://localhost:8000/admin/services') 
       .then(res => res.json())
       .then(data => setRequests(data))
       .catch(err => console.error('Failed to fetch requests:', err))
@@ -13,17 +13,17 @@ export default function RequestTracker() {
   }, [])
 
   const getStatusColor = (status) => {
-    if (status === 'pending') return 'bg-yellow-100 text-yellow-800' // 👈 lowercase
+    if (status === 'pending') return 'bg-yellow-100 text-yellow-800' 
     if (status === 'in_progress') return 'bg-blue-100 text-blue-800'
     return 'bg-green-100 text-green-800'
   }
 
   const updateStatus = async (id, newStatus) => {
     try {
-      await fetch(`http://localhost:8000/admin/services/${id}/status`, { // 👈 changed URL + added /status
+      await fetch(`http://localhost:8000/admin/services/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }) // 👈 matches StatusUpdate model
+        body: JSON.stringify({ status: newStatus }) 
       })
 
       setRequests(reqs => 

@@ -43,15 +43,16 @@ function App() {
           <Route path="/requests" element={<RequestHistory />} />
           <Route path="/request" element={<RequestHistory />} />
           <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/bookings" element={<BookingCalendar />} />
-          <Route path="/admin/reports" element={<ReportsPage />} />
-          <Route path="/admin/requests" element={<RequestTracker />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<Home />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin/bookings" element={<ProtectedRoute><BookingCalendar /></ProtectedRoute>} />
+          <Route path="/admin/reports" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
+          <Route path="/admin/requests" element={<ProtectedRoute><RequestTracker /></ProtectedRoute>} />
+          
+          <Route path="*" element={<Home />} />
         </Routes>
       </>
     </BrowserRouter>

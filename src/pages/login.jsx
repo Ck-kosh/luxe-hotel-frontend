@@ -20,7 +20,6 @@ function simplifyError(code, message) {
   return `Something went wrong (${code ?? "unknown"}). Please try again.`;
 }
 
-// Keep a single pending popup promise so double-clicks don't spawn two popups
 let popupPending = false;
 
 function Login() {
@@ -29,11 +28,9 @@ function Login() {
   const [error, setError]     = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Listen to auth state changes and navigate when user logs in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is logged in, redirect to booking
         navigate("/booking", { replace: true });
       }
     });
@@ -45,9 +42,6 @@ function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError("");
   };
-
-  // ── Email / password ──────────────────────────────────────────────────────
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,10 +67,8 @@ function Login() {
     }
   };
 
-  // ── Google popup ──────────────────────────────────────────────────────────
 
   const handleGoogle = async () => {
-    // Guard: one popup at a time
     if (popupPending) {
       setError("A sign-in window is already open.");
       return;
@@ -86,22 +78,16 @@ function Login() {
       return;
     }
 
-    
-
+  
     setError("");
 
-    // ⚠️  Do NOT call setLoading(true) before signInWithPopup —
-    //     disabling the button immediately can suppress the popup in some browsers.
-    //     Set loading AFTER the popup opens (inside try).
     popupPending = true;
 
     try {
-      // Force account picker every time so users can switch accounts
       provider.setCustomParameters({ prompt: "select_account" });
 
       const result = await signInWithPopup(auth, provider);
 
-      // Popup resolved — now show loading while we write to DB
       setLoading(true);
 
       const user = result.user;
@@ -115,7 +101,6 @@ function Login() {
 
       navigate("/dashboard");
     } catch (err) {
-      // Log full details for debugging
       console.error("Google sign-in error:", err.code, err.message);
       setError(simplifyError(err.code, err.message));
     } finally {
@@ -124,20 +109,15 @@ function Login() {
     }
   };
 
-  // ─────────────────────────────────────────────────────────────────────────
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-slate-100 flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-
-          {/* Header */}
           <div className="bg-teal-700 px-8 py-8 text-center">
             <h1 className="text-3xl font-bold text-white tracking-wide">Welcome Back</h1>
             <p className="text-teal-200 mt-1 text-sm">Sign in to your Luxe Hotel account</p>
           </div>
 
-          {/* Form */}
           <div className="px-8 py-8 space-y-5">
 
             {error && (
@@ -191,7 +171,6 @@ function Login() {
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
-            {/* Google button — never disabled before popup opens */}
             <button
               id="login-google-btn"
               onClick={handleGoogle}

@@ -14,7 +14,6 @@ function Home() {
   return (
     <div className="bg-white text-gray-900 overflow-hidden">
 
-      {/* HERO SECTION */}
       <section className="relative h-screen w-full">
 
         <img
@@ -23,10 +22,8 @@ function Home() {
           className="w-full h-full object-cover"
         />
 
-        {/* Dark Overlay */}
         <div className="absolute inset-0 bg-gradient-to-black from-black/70 via-black/30 to-black/70" />
 
-        {/* Hero Content */}
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6">
 
           <p className="text-yellow-300 uppercase tracking-[6px] text-sm mb-4">
@@ -99,13 +96,6 @@ function Home() {
               Whether you're traveling for business or relaxation, our rooms,
               dining, and personalized service ensure a memorable stay.
             </p>
-{/* 
-            <button
-              onClick={() => navigate("/booking")}
-              className="bg-black text-white px-8 py-4 uppercase tracking-wider hover:bg-gray-800 transition w-fit"
-            >
-              Explore Rooms
-            </button> */}
 
           </div>
 
@@ -119,7 +109,6 @@ function Home() {
 
       </section>
 
-      {/* FEATURES */}
       <section className="py-28 px-6 bg-[#f8f8f8]">
 
         <div className="max-w-6xl mx-auto text-center">
@@ -195,7 +184,6 @@ function Home() {
 
       </section>
 
-      {/* IMAGE SECTION */}
       <section className="relative h-[70vh]">
 
         <img
@@ -229,7 +217,6 @@ function Home() {
 
       </section>
 
-      {/* FOOTER CTA */}
       <section className="bg-blue-600 text-white py-20 px-6 text-center">
 
         <p className="uppercase tracking-[4px] text-sm mb-4 text-white">

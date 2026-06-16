@@ -1,45 +1,25 @@
-const BASE_URL = "http://localhost:8000";
+const API_URL = "http://localhost:8000";
 
-export const getBookings = async () => {
-  const res = await fetch(`${BASE_URL}/admin/bookings`);
-  return res.json();
-};
-
-export const addBooking = async (booking) => {
-  const res = await fetch(`${BASE_URL}/bookings`, {
-    method: "POST",
+const request = async (url, options = {}) => {
+  const res = await fetch(`${API_URL}${url}`, {
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(booking)
+    ...options
   });
-  return res.json();
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
 };
 
-export const updateBooking = async (id, data) => {
-  const res = await fetch(`${BASE_URL}/bookings/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-  return res.json();
+const API = {
+  get: (url) => request(url),
+  post: (url, data) => request(url, { method: "POST", body: JSON.stringify(data) }),
+  patch: (url, data) => request(url, { method: "PATCH", body: JSON.stringify(data) }),
+
+  createBooking: (data) => request("/bookings/bookings", { method: "POST", body: JSON.stringify(data) }),
+  getAllBookings: () => request("/bookings/bookings"),
+  getAdminStats: () => request("/bookings/admin/stats"),
+
+  createServiceRequest: (data) => request("/service-requests/", { method: "POST", body: JSON.stringify(data) }),
+  getAllServiceRequests: () => request("/service-requests/"),
 };
 
-export const deleteBooking = async (id) => {
-  await fetch(`${BASE_URL}/bookings/${id}`, { method: "DELETE" });
-};
-
-export const getAdminStats = async () => {
-  const res = await fetch(`${BASE_URL}/admin/stats`);
-  return res.json();
-};
-
-export const getRequests = async () => {
-  const res = await fetch(`${BASE_URL}/requests`);
-  return res.json();
-};
-
-export const getReports = async () => {
-  const res = await fetch(`${BASE_URL}/reports`);
-  return res.json();
-};
-
-export default { getBookings, addBooking, updateBooking, deleteBooking, getAdminStats, getRequests, getReports }
+export default API;

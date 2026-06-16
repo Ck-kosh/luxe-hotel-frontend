@@ -95,16 +95,13 @@ function Booking() {
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProducts();
   }, [fetchProducts]);
 
-  // REFRESH WHEN PRODUCTS UPDATED ELSEWHERE (e.g., admin adds/deletes, another tab books, or another browser session)
   useEffect(() => {
     const handler = (e) => {
       const detail = e?.detail;
 
-      // If admin provided the new room data, add it locally
       if (detail && !detail.action) {
         setProducts((prev) => {
           const exists = prev.find((p) => p.id === detail.id);
@@ -114,13 +111,10 @@ function Booking() {
         return;
       }
 
-      // If delete action provided, remove locally
       if (detail && detail.action === "delete") {
         setProducts((prev) => prev.filter((p) => p.id !== detail.id));
         return;
       }
-
-      // Fallback: refetch from API
       fetchProducts();
     };
 
@@ -145,8 +139,6 @@ function Booking() {
       window.removeEventListener("focus", fetchProducts);
     };
   }, [fetchProducts]);
-
-  // BOOK ROOM
   const addToCart = async (product) => {
 
     const availableRooms =
@@ -161,7 +153,6 @@ function Booking() {
       return;
     }
 
-    // UPDATE CART
     setCart((prevCart) => {
 
       const existingItem = prevCart.find(
@@ -212,7 +203,6 @@ function Booking() {
       )
     );
 
-    // UPDATE DATABASE
     try {
 
       await API.patch(
@@ -234,7 +224,6 @@ function Booking() {
     }
   };
 
-  // PROCEED TO PAYMENT
   const handleCheckout = () => {
 
     if (cart.length === 0) {
@@ -253,7 +242,6 @@ function Booking() {
     navigate("/login");
   };
 
-  // SEARCH
   const filteredProducts = products.filter(
     (product) =>
 
@@ -266,7 +254,6 @@ function Booking() {
 
     <div className="min-h-screen bg-[#f5f5f5]">
 
-      {/* HERO SECTION */}
       <div className="relative h-[40vh] w-full">
 
         <img
@@ -275,7 +262,6 @@ function Booking() {
           className="w-full h-full object-cover"
         />
 
-        {/* OVERLAY */}
         <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center px-4">
 
           <p className="text-white uppercase tracking-[5px] mb-4 text-sm">
@@ -290,10 +276,8 @@ function Booking() {
 
       </div>
 
-      {/* CONTENT */}
       <div className="max-w-7xl mx-auto px-6 py-16">
 
-        {/* SEARCH */}
         <div className="mb-10">
           <SearchBar
             search={search}
@@ -302,8 +286,6 @@ function Booking() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-
-          {/* ROOMS */}
           <div className="lg:col-span-3">
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -321,7 +303,6 @@ function Booking() {
 
           </div>
 
-          {/* BOOKING SUMMARY */}
           <Cart
             cart={cart}
             handleBuy={handleCheckout}
