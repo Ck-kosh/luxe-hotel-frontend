@@ -57,19 +57,30 @@ function Cart({
     try {
       const response = await darajaApi.initiateSTKPush(paymentData);
 
+
       const rc = response?.ResponseCode ?? response?.responseCode ?? response?.ResponseCode;
       if (rc === '0' || rc === 0) {
         setPaymentStatus(`Payment initiated via M-Pesa. Please check your phone.`);
         if (typeof handleBuy === 'function') handleBuy(userDetails);
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setPaymentStatus(`Payment initiated via ${userDetails.paymentMethod}. Please check your phone.`);
+        // Call handleBuy to proceed to login after payment
+        handleBuy();
+        // ed46851 (initial commit)
       } else {
         const msg = response?.errorMessage || response?.ResponseDescription || response?.error || response?.message || 'Unknown error';
         setPaymentStatus(`Payment failed: ${msg}`);
       }
-    } catch (error) {
+    } 
+  }catch (error) {
       console.error('Payment request error:', error);
       setPaymentStatus(`Payment failed: ${error.message || 'An error occurred while processing your payment.'}`);
     }
   };
+  
 
   if (isCheckingOut) {
     return (
