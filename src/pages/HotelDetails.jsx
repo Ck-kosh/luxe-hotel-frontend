@@ -66,9 +66,6 @@ const HotelDetails = () => {
         <p className="text-gray-700 mb-4">
           Ready to experience the best? Book your room now and enjoy a comfortable stay at Luxe Hotel.
         </p>
-        {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Book Now
-        </button> */}
       </div>
     </div>
   );

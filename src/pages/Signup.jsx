@@ -26,11 +26,9 @@ function Signup() {
   const [error, setError]     = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Listen to auth state changes and navigate when user logs in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is logged in, redirect to booking
         navigate("/booking", { replace: true });
       }
     });
@@ -42,8 +40,6 @@ function Signup() {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError("");
   };
-
-  // ── Email / password signup ───────────────────────────────────────────────
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,10 +62,8 @@ function Signup() {
     try {
       const cred = await createUserWithEmailAndPassword(auth, form.email, form.password);
 
-      // Set display name in Firebase Auth immediately
       await updateProfile(cred.user, { displayName: form.name });
 
-      // Write to Realtime Database
       await set(ref(db, "users/" + cred.user.uid), {
         username:  form.name,
         email:     form.email,
@@ -88,8 +82,6 @@ function Signup() {
     }
   };
 
-  // ── Google popup signup ───────────────────────────────────────────────────
-
   const handleGoogle = async () => {
     if (popupPending) {
       setError("A sign-in window is already open.");
@@ -104,10 +96,7 @@ function Signup() {
     popupPending = true;
 
     try {
-      // Force account picker so user can choose / switch accounts
       provider.setCustomParameters({ prompt: "select_account" });
-
-      // ⚠️  Open popup FIRST — setLoading AFTER — or browsers block the popup
       const result = await signInWithPopup(auth, provider);
 
       setLoading(true);
@@ -133,20 +122,16 @@ function Signup() {
     }
   };
 
-  // ─────────────────────────────────────────────────────────────────────────
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-slate-100 flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
 
-          {/* Header */}
           <div className="bg-teal-700 px-8 py-8 text-center">
             <h1 className="text-3xl font-bold text-white tracking-wide">Create Account</h1>
             <p className="text-teal-200 mt-1 text-sm">Join Luxe Hotel and start your journey</p>
           </div>
 
-          {/* Form */}
           <div className="px-8 py-8 space-y-5">
 
             {error && (
@@ -228,7 +213,6 @@ function Signup() {
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
-            {/* Google button — never disabled before popup opens */}
             <button
               id="signup-google-btn"
               onClick={handleGoogle}

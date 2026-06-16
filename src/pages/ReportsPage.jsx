@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import { getBookings } from "../services/api.js"
+import API from "../services/api.js"
 
 export default function Reports() {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getBookings().then(setBookings)
+    API.getAllBookings().then(setBookings)
     .finally(() => setLoading(false))
   }, [])
 

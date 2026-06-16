@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import { getBookings, addBooking } from "../services/api.js"
+import API from "../services/api.js"
 
 export default function BookingCalendar() {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getBookings()
+    API.getAllBookings()
       .then(data => {
         setBookings(data)
         setLoading(false)
