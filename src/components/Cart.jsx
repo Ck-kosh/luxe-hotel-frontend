@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import darajaApi from '../services/darajaApi';
 
 function Cart({
   cart,
@@ -47,38 +48,26 @@ function Cart({
     const paymentData = {
       phone_number: userDetails.phoneNumber,
       amount: total,
-      email: userDetails.email, // Include email for potential future use or logging
-      full_name: userDetails.fullName // Include full name
+      booking_id: 1,
+      user_id: 1,
+      account_reference: `booking-${Date.now()}`,
+      transaction_description: `Hotel booking payment for ${userDetails.fullName}`,
     };
 
-    let endpoint = '';
-    if (userDetails.paymentMethod === 'mpesa') {
-      endpoint = 'http://localhost:8000/mpesa/stkpush'; // Replace with your actual backend URL
-    } else if (userDetails.paymentMethod === 'airtel') {
-      endpoint = 'http://localhost:8000/airtel/push'; // Replace with your actual backend URL
-    }
-
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(paymentData),
-      });
+      const response = await darajaApi.initiateSTKPush(paymentData);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setPaymentStatus(`Payment initiated via ${userDetails.paymentMethod}. Please check your phone.`);
-        // Optionally, call handleBuy after successful initiation
-        // handleBuy(userDetails);
+      const rc = response?.ResponseCode ?? response?.responseCode ?? response?.ResponseCode;
+      if (rc === '0' || rc === 0) {
+        setPaymentStatus(`Payment initiated via M-Pesa. Please check your phone.`);
+        if (typeof handleBuy === 'function') handleBuy(userDetails);
       } else {
-        setPaymentStatus(`Payment failed: ${data.detail || 'Unknown error'}`);
+        const msg = response?.errorMessage || response?.ResponseDescription || response?.error || response?.message || 'Unknown error';
+        setPaymentStatus(`Payment failed: ${msg}`);
       }
     } catch (error) {
       console.error('Payment request error:', error);
-      setPaymentStatus('An error occurred while processing your payment. Please try again.');
+      setPaymentStatus(`Payment failed: ${error.message || 'An error occurred while processing your payment.'}`);
     }
   };
 
