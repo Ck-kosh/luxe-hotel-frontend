@@ -1,24 +1,30 @@
 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import Login from "./Login";
+import { vi } from "vitest";
+import { onAuthStateChanged } from "firebase/auth";
+import Login from "../pages/login.jsx";
 
-jest.mock("firebase/auth", () => ({
-  signInWithEmailAndPassword: jest.fn(),
-  signInWithPopup: jest.fn(),
-  onAuthStateChanged: jest.fn((auth, callback) => {
+vi.mock("firebase/auth", () => ({
+  signInWithEmailAndPassword: vi.fn(),
+  signInWithPopup: vi.fn(),
+  onAuthStateChanged: vi.fn((auth, callback) => {
     callback(null);
-    return jest.fn();
+    return vi.fn();
   }),
-  GoogleAuthProvider: jest.fn(),
+  GoogleAuthProvider: vi.fn(),
 }));
 
-jest.mock("../services/firebase", () => ({
+vi.mock("../services/firebase", () => ({
   auth: {},
   db: {},
   provider: {
-    setCustomParameters: jest.fn(),
+    setCustomParameters: vi.fn(),
   },
+}));
+
+vi.mock("../services/auth", () => ({
+  logOut: vi.fn(),
 }));
 
 describe("Login Component", () => {
@@ -41,10 +47,10 @@ describe("Login Component", () => {
       </BrowserRouter>
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /log in/i }));
+    fireEvent.submit(screen.getByRole("form"));
 
     expect(
-      screen.getByText("Please fill in all fields.")
+      await screen.findByText("Please fill in all fields.")
     ).toBeInTheDocument();
   });
 
@@ -90,6 +96,22 @@ describe("Login Component", () => {
     expect(
       screen.getByText("Continue with Google")
     ).toBeInTheDocument();
+  });
+
+  test("shows logout option when user is already signed in", () => {
+    onAuthStateChanged.mockImplementation((auth, callback) => {
+      callback({ email: "user@example.com" });
+      return vi.fn();
+    });
+
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText(/already signed in as/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /logout/i })).toBeInTheDocument();
   });
 });
 

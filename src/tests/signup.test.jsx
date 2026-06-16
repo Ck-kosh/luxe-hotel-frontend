@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Signup from "../pages/Signup";
 import { BrowserRouter } from "react-router-dom";
+import { vi } from "vitest";
 
 import {
   createUserWithEmailAndPassword,
@@ -11,33 +12,35 @@ import {
 
 import { set } from "firebase/database";
 
-// Mock Firebase
-jest.mock("firebase/auth", () => ({
-  createUserWithEmailAndPassword: jest.fn(),
-  updateProfile: jest.fn(),
-  signInWithPopup: jest.fn(),
-  onAuthStateChanged: jest.fn(),
+vi.mock("firebase/auth", () => ({
+  createUserWithEmailAndPassword: vi.fn(),
+  updateProfile: vi.fn(),
+  signInWithPopup: vi.fn(),
+  onAuthStateChanged: vi.fn(),
 }));
 
-jest.mock("firebase/database", () => ({
-  ref: jest.fn(),
-  set: jest.fn(),
+vi.mock("firebase/database", () => ({
+  ref: vi.fn(),
+  set: vi.fn(),
 }));
 
-jest.mock("../services/firebase", () => ({
+vi.mock("../services/firebase", () => ({
   auth: {},
   db: {},
   provider: {
-    setCustomParameters: jest.fn(),
+    setCustomParameters: vi.fn(),
   },
 }));
 
-const mockNavigate = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 const renderSignup = () =>
   render(
@@ -48,11 +51,11 @@ const renderSignup = () =>
 
 describe("Signup Component", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     onAuthStateChanged.mockImplementation((auth, callback) => {
       callback(null);
-      return jest.fn();
+      return vi.fn();
     });
   });
 
@@ -201,7 +204,7 @@ describe("Signup Component", () => {
   test("redirects authenticated users to booking page", () => {
     onAuthStateChanged.mockImplementation((auth, callback) => {
       callback({ uid: "123" });
-      return jest.fn();
+      return vi.fn();
     });
 
     renderSignup();
