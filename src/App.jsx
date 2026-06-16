@@ -18,6 +18,8 @@ import RequestHistory from "./pages/RequestHistory";
 import ContactUs from "./pages/ContactUs";
 import BookingCalendar from "./pages/BookingCalendar";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ReportsPage from "./pages/ReportsPage";
 import RequestTracker from "./pages/RequestTracker";
 import Login from "./pages/login";
@@ -48,6 +50,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<Home />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>
       </>
     </BrowserRouter>

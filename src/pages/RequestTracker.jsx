@@ -5,7 +5,7 @@ export default function RequestTracker() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('http://localhost:8000/admin/requests')
+    fetch('http://localhost:8000/admin/services') // 👈 changed from /admin/requests
       .then(res => res.json())
       .then(data => setRequests(data))
       .catch(err => console.error('Failed to fetch requests:', err))
@@ -13,17 +13,17 @@ export default function RequestTracker() {
   }, [])
 
   const getStatusColor = (status) => {
-    if (status === 'Pending') return 'bg-yellow-100 text-yellow-800'
-    if (status === 'In Progress') return 'bg-blue-100 text-blue-800'
+    if (status === 'pending') return 'bg-yellow-100 text-yellow-800' // 👈 lowercase
+    if (status === 'in_progress') return 'bg-blue-100 text-blue-800'
     return 'bg-green-100 text-green-800'
   }
 
   const updateStatus = async (id, newStatus) => {
     try {
-      await fetch(`http://localhost:8000/admin/requests/${id}`, {
+      await fetch(`http://localhost:8000/admin/services/${id}/status`, { // 👈 changed URL + added /status
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }) // 👈 matches StatusUpdate model
       })
 
       setRequests(reqs => 
@@ -48,18 +48,20 @@ export default function RequestTracker() {
           requests.map(req => (
             <div key={req.id} className="bg-white p-4 rounded-lg shadow border flex justify-between items-center">
               <div>
-                <p className="font-semibold">{req.type} - Room {req.room}</p>
-                <p className="text-sm text-gray-500">{req.time}</p>
+                <p className="font-semibold">{req.service_type} - Room {req.room_number}</p> // 👈 DB column names
+                <p className="text-sm text-gray-500">
+                  {new Date(req.created_at).toLocaleString()} // 👈 format timestamp
+                </p>
               </div>
               
               <div className="flex items-center gap-3">
-                <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(req.status)}`}>
-                  {req.status}
+                <span className={`px-3 py-1 rounded-full text-sm capitalize ${getStatusColor(req.status)}`}>
+                  {req.status.replace('_', ' ')}
                 </span>
-                
-                {req.status !== 'Completed' && (
+          
+                {req.status !== 'completed' && ( // 👈 lowercase
                   <button 
-                    onClick={() => updateStatus(req.id, 'Completed')}
+                    onClick={() => updateStatus(req.id, 'completed')}
                     className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
                   >
                     Mark Complete
