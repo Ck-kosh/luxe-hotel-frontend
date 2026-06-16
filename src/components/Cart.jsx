@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import darajaApi from '../services/darajaApi';
 
 function Cart({
   cart,
-  handleBuy
+  handleBuy,
+  user,
+  authLoading
 }) {
+  const navigate = useNavigate();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [userDetails, setUserDetails] = useState({
     fullName: '',
@@ -31,6 +35,16 @@ function Cart({
 
   const onProceedToCheckout = () => {
     if (cart.length === 0) return;
+
+    if (!user) {
+      if (authLoading) {
+        alert("Checking login status. Please wait a moment.");
+        return;
+      }
+      navigate("/login", { state: { from: "/booking" } });
+      return;
+    }
+
     setIsCheckingOut(true);
     setPaymentStatus(null); // Reset payment status on new checkout attempt
   };
