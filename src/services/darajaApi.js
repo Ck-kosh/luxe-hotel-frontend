@@ -44,13 +44,12 @@ export async function initiateSTKPush(paymentData) {
 export async function checkTransactionStatus(checkoutRequestId) {
   try {
     const response = await fetch(
-      `${BACKEND_URL}/payments/query-status`,
+      `${BACKEND_URL}/payments/status/${checkoutRequestId}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ checkoutRequestId }),
       }
     );
 
